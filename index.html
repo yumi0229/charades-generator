@@ -255,7 +255,7 @@
     <div class="history-area">
       <h2>歷史紀錄</h2>
       <ul id="history-list">
-        <span class="empty-history">尚無紀錄</span>
+        
       </ul>
     </div>
   </div>
@@ -335,13 +335,16 @@
     function clearHistoryUI() {
       historyListEl.innerHTML = "";
 
-      const span = document.createElement("span");
-      span.className = "empty-history";
-      span.textContent = "尚無紀錄";
-      historyListEl.appendChild(span);
+      const empty = document.createElement("span");
+      empty.className = "empty-history";
+      empty.textContent = "尚無紀錄";
+      historyListEl.appendChild(empty);
     }
 
     function addHistoryUI(text) {
+      const empty = document.querySelector(".empty-history");
+      if (empty) empty.remove();
+
       const li = document.createElement("li");
       li.textContent = text;
       historyListEl.insertBefore(li, historyListEl.firstChild);
@@ -350,10 +353,15 @@
     function refreshHistoryUI() {
       historyListEl.innerHTML = "";
 
-      for (let item of history.toReversed()) {
-        const li = document.createElement("li");
-        li.textContent = item;
-        historyListEl.appendChild(li);
+      if (history.length) {
+        for (let item of history.toReversed()) {
+          const li = document.createElement("li");
+          li.textContent = item;
+          historyListEl.appendChild(li);
+        }
+      }
+      else {
+        clearHistoryUI();
       }
     }
 
