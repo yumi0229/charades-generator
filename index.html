@@ -15,13 +15,14 @@
     :root {
       --bg-color: #1c1f26;
       --surface: #16181d;
+      --text-button: #edf0f8;
       --text-main: #b3bbcc;
       --text-muted: #576175;
       --border: #53607933;
       --easy: #25855b;
       --medium: #a98c35;
       --hard: #a8506f;
-      --reset: #576175;
+      --disabled: #2b303b;
     }
 
     * {
@@ -63,6 +64,28 @@
       font-size: 1.5rem;
     }
 
+    .header-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .header-buttons button {
+      flex-grow: 1;
+      background-color: var(--text-muted);
+      width: auto;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      flex-direction: row;
+    }
+
+    .btn-fullscreen.fullscreen .icon-enter {
+      display: none;
+    }
+
+    .btn-fullscreen:not(.fullscreen) .icon-exit {
+      display: none;
+    }
+
     .controls {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -77,13 +100,22 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      color: white;
-      transition: transform 150ms;
+      color: var(--text-button);
+      transition: opacity 100ms, transform 150ms;
       will-change: transform;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.5rem;
+    }
+
+    button:focus-visible {
+      outline: none;
+    }
+      
+    button svg {
+      fill: var(--text-button);
+      height: 1.2rem;
     }
 
     button:hover:not(:disabled) {
@@ -95,9 +127,8 @@
     }
 
     button:disabled {
-      opacity: 0.5;
+      background: var(--disabled);
       cursor: not-allowed;
-      filter: grayscale(100%);
     }
 
     .btn-easy {
@@ -110,14 +141,6 @@
 
     .btn-hard {
       background-color: var(--hard);
-    }
-
-    .btn-reset {
-      background-color: var(--reset);
-      width: auto;
-      font-size: 1rem;
-      padding: 0.5rem 2rem;
-      flex-direction: row;
     }
 
     .count {
@@ -140,7 +163,7 @@
       justify-content: center;
     }
 
-    #question-text {
+    .question-text {
       font-size: 2rem;
       font-weight: 500;
       margin: 0;
@@ -163,7 +186,7 @@
       color: var(--text-muted);
     }
 
-    #history-list {
+    .history-list {
       list-style: none;
       padding: 0;
       margin: 0;
@@ -172,7 +195,7 @@
       gap: 0.5rem;
     }
 
-    #history-list li {
+    .history-list li {
       background: var(--bg-color);
       border: 1px solid var(--border);
       padding: 0.4rem 0.8rem;
@@ -201,7 +224,7 @@
         text-align: center;
       }
 
-      .btn-reset {
+      .header-buttons {
         width: 100%;
       }
 
@@ -215,7 +238,7 @@
         min-height: 100px;
       }
 
-      #question-text {
+      .question-text {
         font-size: 1.5rem;
       }
 
@@ -233,53 +256,69 @@
   <div class="container">
     <div class="header">
       <h1>比手畫腳題目產生器</h1>
-      <button class="btn-reset" onclick="reset()">重置題目</button>
+      <div class="header-buttons">
+        <button class="btn-reset" onclick="reset()">
+          <svg viewBox="0 0 24 24" class="icon-reset">
+            <path d="M6.04599,11.6767 C7.35323,9.47493 9.75524,8 12.5,8 C16.6421,8 20,11.3579 20,15.5 C20,16.0523 20.4477,16.5 21,16.5 C21.5523,16.5 22,16.0523 22,15.5 C22,10.2533 17.7467,6 12.5,6 C9.31864,6 6.50386,7.56337 4.78,9.96279 L4.24303,6.91751 C4.14713,6.37361 3.62847,6.01044 3.08458,6.10635 C2.54068,6.20225 2.17751,6.72091 2.27342,7.2648 L3.31531,13.1736 C3.36136,13.4348 3.50928,13.667 3.72654,13.8192 C4.0104,14.0179 4.38776,14.0542 4.70227,13.9445 L10.3826,12.9429 C10.9265,12.847 11.2897,12.3284 11.1938,11.7845 C11.0979,11.2406 10.5792,10.8774 10.0353,10.9733 L6.04599,11.6767 Z"></path>
+          </svg>
+          重置
+        </button>
+        <button class="btn-fullscreen" onclick="fullscreen()">
+          <svg viewBox="0 0 24 24" class="icon-enter">
+            <path d="M9.79289,12.7929 C10.1834,12.4024 10.8166,12.4024 11.2071,12.7929 C11.5675615,13.1533615 11.5952893,13.7206207 11.2902834,14.1128973 L11.2071,14.2071 L6.41421,19 L9,19 C9.55229,19 10,19.4477 10,20 C10,20.51285 9.61396434,20.9355092 9.1166221,20.9932725 L9,21 L4,21 C3.48716857,21 3.06449347,20.613973 3.0067278,20.1166239 L3,20 L3,15 C3,14.4477 3.44772,14 4,14 C4.51283143,14 4.93550653,14.386027 4.9932722,14.8833761 L5,15 L5,17.5858 L9.79289,12.7929 Z M20,3 C20.51285,3 20.9355092,3.38604429 20.9932725,3.88337975 L21,4 L21,9 C21,9.55228 20.5523,10 20,10 C19.48715,10 19.0644908,9.61395571 19.0067275,9.11662025 L19,9 L19,6.41421 L14.2071,11.2071 C13.8166,11.5976 13.1834,11.5976 12.7929,11.2071 C12.4324385,10.8466385 12.4047107,10.2793793 12.7097166,9.88709487 L12.7929,9.79289 L17.5858,5 L15,5 C14.4477,5 14,4.55229 14,4 C14,3.48716857 14.386027,3.06449347 14.8833761,3.0067278 L15,3 L20,3 Z"></path>
+          </svg>
+          <svg viewBox="0 0 24 24" class="icon-exit">
+            <path d="M11,12 C11.51285,12 11.9355092,12.386027 11.9932725,12.8833761 L12,13 L12,18 C12,18.5523 11.5523,19 11,19 C10.48715,19 10.0644908,18.613973 10.0067275,18.1166239 L10,18 L10,15.4142 L4.70711,20.7071 C4.31658,21.0976 3.68342,21.0976 3.29289,20.7071 C2.93241,20.3466385 2.90468077,19.7793793 3.20970231,19.3871027 L3.29289,19.2929 L8.58579,14 L6,14 C5.44771,14 5,13.5523 5,13 C5,12.48715 5.38603566,12.0644908 5.8833779,12.0067275 L6,12 L11,12 Z M19.2929,3.29289 C19.6834,2.90237 20.3166,2.90237 20.7071,3.29289 C21.0675615,3.65337923 21.0952893,4.22060645 20.7902834,4.61290152 L20.7071,4.70711 L15.4142,10 L18,10 C18.5523,10 19,10.4477 19,11 C19,11.51285 18.613973,11.9355092 18.1166239,11.9932725 L18,12 L13,12 C12.48715,12 12.0644908,11.613973 12.0067275,11.1166239 L12,11 L12,6 C12,5.44772 12.4477,5 13,5 C13.51285,5 13.9355092,5.38604429 13.9932725,5.88337975 L14,6 L14,8.58579 L19.2929,3.29289 Z"></path>
+          </svg>
+          全螢幕
+        </button>
+      </div>
     </div>
 
     <div class="controls">
-      <button class="btn-easy" id="btn-easy" onclick="pick('easy')">
-        簡單 <span class="count" id="count-easy"></span>
+      <button class="btn-easy" class="btn-easy" onclick="pick('easy')">
+        簡單 <span class="count count-easy"></span>
       </button>
-      <button class="btn-medium" id="btn-medium" onclick="pick('medium')">
-        中等 <span class="count" id="count-medium"></span>
+      <button class="btn-medium" class="btn-medium" onclick="pick('medium')">
+        中等 <span class="count count-medium"></span>
       </button>
-      <button class="btn-hard" id="btn-hard" onclick="pick('hard')">
-        困難 <span class="count" id="count-hard"></span>
+      <button class="btn-hard" class="btn-hard" onclick="pick('hard')">
+        困難 <span class="count count-hard"></span>
       </button>
     </div>
 
     <div class="display-area">
-      <p id="question-text" class="placeholder"></p>
+      <p class="question-text" class="placeholder"></p>
     </div>
 
     <div class="history-area">
       <h2>歷史紀錄</h2>
-      <ul id="history-list">
-        
-      </ul>
+      <ul class="history-list"></ul>
     </div>
   </div>
 
   <script>
     const fullPools = {
       easy: [
-        "棒球", "籃球", "鋼琴", "電視", "睡覺",
-        "刷牙", "開車", "拍照", "洗澡", "唱歌",
-        "游泳", "釣魚", "理髮", "讀書", "做飯",
-        "掃地" 
+        "棒球", "籃球", "鋼琴", "電視", "耳機",
+        "桌機", "筆電", "睡覺", "刷牙", "開車",
+        "拍照", "洗澡", "唱歌", "游泳", "釣魚",
+        "理髮", "讀書", "做飯", "掃地", "打字" 
       ],
       medium: [
         "樹",    "火山",   "泡麵",   "袋鼠",  
-        "警察",   "雨傘",   "蠟燭",   "相機",  
-        "冰箱",   "狙擊槍",  "手搖飲",  "太空人", 
-        "雲霄飛車", "喝酒",   "化妝",   "騎馬",  
-        "衝浪",   "攀岩",   "猜拳",   "打拳擊", 
-        "換衣服",  "做實驗",  "動手術"  
+        "喇叭",   "警察",   "雨傘",   "蠟燭",  
+        "相機",   "冰箱",   "狙擊槍",  "防火牆", 
+        "手搖飲",  "太空人",  "雲霄飛車", "喝酒",  
+        "化妝",   "騎馬",   "衝浪",   "攀岩",  
+        "猜拳",   "打拳擊",  "換衣服",  "做實驗", 
+        "動手術"  
       ],
       hard: [
-        "瓢蟲",  "壽司",  "黑洞",  "龍捲風",
-        "潛水艇", "伺服器", "圖書館", "跳傘", 
-        "甩尾",  "寄信",  "結婚",  "修電腦" 
+        "瓢蟲",   "壽司",   "黑洞",   "龍捲風", 
+        "潛水艇",  "伺服器",  "圖書館",  "人工智慧",
+        "虛擬實境", "建北電資", "跳傘",   "甩尾",  
+        "寄信",   "結婚",   "修電腦"  
       ]
     };
 
@@ -298,8 +337,9 @@
       };
     }
 
-    const displayEl = document.getElementById("question-text");
-    const historyListEl = document.getElementById("history-list");
+    const displayEl = document.querySelector(".question-text");
+    const historyListEl = document.querySelector(".history-list");
+    const fullscreenButtonEl = document.querySelector(".btn-fullscreen");
 
     function showPlaceholder() {
       displayEl.textContent = "點選難度以產生題目";
@@ -319,26 +359,19 @@
 
       const count = pools[diff].length;
       
-      const btn = document.getElementById(`btn-${diff}`);
-      const countBadge = document.getElementById(`count-${diff}`);
+      const btn = document.querySelector(`.btn-${diff}`);
+      const countBadge = document.querySelector(`.count-${diff}`);
 
       countBadge.textContent = `剩餘 ${count} 題`;
-
-      if (count === 0) {
-        btn.disabled = true;
-      } 
-      else {
-        btn.disabled = false;
-      }
+      btn.disabled = !count;
     }
 
     function clearHistoryUI() {
-      historyListEl.innerHTML = "";
-
-      const empty = document.createElement("span");
-      empty.className = "empty-history";
-      empty.textContent = "尚無紀錄";
-      historyListEl.appendChild(empty);
+      historyListEl.innerHTML = /* html */ `
+        <span class="empty-history">
+          尚無紀錄
+        </span>
+      `;
     }
 
     function addHistoryUI(text) {
@@ -395,7 +428,9 @@
         const last = pool.length - 1;
         const rand = Math.floor(Math.random() * pool.length);
 
-        [pool[rand], pool[last]] = [pool[last], pool[rand]];
+        if (rand !== last) {
+          [pool[rand], pool[last]] = [pool[last], pool[rand]];
+        }
       }
 
       const result = pool.pop();
@@ -418,6 +453,19 @@
         refreshHistoryUI();
       }
     }
+
+    function fullscreen() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+      else {
+        document.documentElement.requestFullscreen();
+      }
+    }
+
+    document.addEventListener("fullscreenchange", (ev) => {
+      fullscreenButtonEl.classList[document.fullscreenElement ? "add" : "remove"]("fullscreen");
+    });
 
     init();
   </script>
